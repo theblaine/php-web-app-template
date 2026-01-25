@@ -2,7 +2,7 @@
 
 This repository contains a **single-file PHP web application** designed to stay simple, explicit, and easy to understand.
 
-There are no frameworks, no autoloaders, no routing libraries, and no environment magic.  
+There are no frameworks, no autoloaders, no routing libraries, and no environment magic.
 Everything runs from one `index.php` file, with an optional local configuration include.
 
 ---
@@ -137,19 +137,6 @@ This keeps content and layout logically separated while remaining in a single fi
 - Prefer clarity over abstraction
 
 If the file starts becoming hard to understand, it’s a signal to refactor intentionally — not incrementally.
-
----
-
-## Version
-
-```
-v1.1-single-file-with-config
-```
-
-This version represents a stable baseline:
-- single file
-- local config include
-- debug-controlled error handling
 
 ---
 
