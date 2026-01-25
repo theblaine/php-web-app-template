@@ -13,6 +13,8 @@ declare(strict_types=1);
 // -------------------------------------------------
 // Local configuration (required)
 // -------------------------------------------------
+## RENAME OR MAKE A COPY OF config.example.local.php
+## TO config.local.php
 $configPath = __DIR__ . '/config.local.php';
 
 if (!file_exists($configPath)) {
