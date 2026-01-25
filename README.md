@@ -1,76 +1,72 @@
-# Clean PHP Baseline (Root-Only)
+# Single-File PHP App (With Local Config)
 
-A minimal, framework-free PHP web application designed to be predictable, readable, and easy to reason about.
+This repository contains a **single-file PHP web application** designed to stay simple, explicit, and easy to understand.
 
-This repository intentionally avoids frameworks, autoloaders, environment magic, build scripts, and hidden configuration. Everything lives in the repository root and runs with plain PHP.
+There are no frameworks, no autoloaders, no routing libraries, and no environment magic.  
+Everything runs from one `index.php` file, with an optional local configuration include.
 
 ---
 
 ## Goals
 
-- Provide a known-good baseline for small PHP web apps
-- Make every file’s responsibility obvious
-- Eliminate path confusion and implicit behavior
-- Serve as a reference point when experimenting or refactoring
+- One folder
+- One executable PHP file
+- Explicit control over behavior
+- Easy to debug and reason about
+- Safe to copy, rename, or deploy anywhere
 
-If something breaks, you should immediately know where and why.
+This template is ideal for:
+- internal tools
+- admin utilities
+- prototypes
+- simple web apps
+- sanity-checking PHP environments
 
 ---
 
 ## Requirements
 
-- PHP 8.1 or newer (recommended)
-- Any web server capable of serving PHP  
+- PHP 8.1 or newer
+- Any PHP-capable web server  
   (Apache, Nginx, IIS, or PHP’s built-in server)
 
-No Composer dependencies. No external libraries.
+No Composer. No external dependencies.
 
 ---
 
 ## Project Structure
 
-All files live in the repository root.
-
 ```
 /
-├─ index.php          # Single entry point
-├─ bootstrap.php      # Error handling and config loading
-├─ config.local.php   # Local configuration (gitignored)
-├─ layout.php         # Base HTML layout
-├─ header.php         # Shared header
-├─ footer.php         # Shared footer
-├─ home.php           # Home page content
-├─ simple/            # Single-file reference implementation
-│  └─ index.php
+├─ index.php
+├─ config.local.php   (gitignored)
+├─ README.md
 └─ .gitignore
 ```
 
 ---
 
-## How the Application Works
+## How It Works
 
 ### Entry Point
 
-`index.php` is the only entry point. It is responsible for:
+`index.php` is the only executable file. It performs these steps in order:
 
-1. Loading `bootstrap.php`
-2. Setting page-level variables
-3. Including a page file
+1. Loads local configuration
+2. Applies error handling based on configuration
+3. Selects a page using a query parameter
+4. Renders page content
+5. Wraps content in a simple HTML layout
 
-Example:
-
-```php
-require __DIR__ . '/bootstrap.php';
-require __DIR__ . '/home.php';
-```
+There are no hidden includes or side effects.
 
 ---
 
-### Configuration
+## Configuration
 
 Local configuration lives in `config.local.php`.
 
-This file is required and intentionally not committed to version control.
+This file is required and intentionally **not committed** to version control.
 
 Example:
 
@@ -78,82 +74,82 @@ Example:
 <?php
 
 return [
-    'app_name' => 'My PHP App',
+    'app_name' => 'Single File PHP App',
     'debug' => true,
 ];
 ```
 
-There is no `.env` file and no environment variable loader. Configuration is explicit and PHP-native.
+### `debug` setting
+
+- `true`  → PHP errors are displayed in the browser
+- `false` → PHP errors are hidden from the browser
+
+This allows the same codebase to be used for development and production.
 
 ---
 
-### Templates and Layout
+## Page Handling
 
-Pages generate content using PHP output buffering:
+Pages are handled explicitly inside `index.php` using a switch statement:
 
 ```php
-ob_start();
-// Page HTML here
-$content = ob_get_clean();
-require 'layout.php';
+$page = $_GET['page'] ?? 'home';
+
+switch ($page) {
+    case 'page1':
+        // Page 1 output
+        break;
+
+    case 'page2':
+        // Page 2 output
+        break;
+
+    default:
+        // Home page
+        break;
+}
 ```
 
-The layout file (`layout.php`) wraps the page content:
+Navigation uses simple query strings:
 
-```php
-<main>
-    <?= $content ?>
-</main>
+```
+?page=page1
+?page=page2
 ```
 
-This approach provides layout control without introducing a framework or template engine.
+No routing layer is used.
 
 ---
 
-## /simple Reference Application
+## Layout
 
-The `simple/` folder contains a single-file version of the app:
+Page content is captured using output buffering and injected into a simple layout at the bottom of the file.
 
-```
-/simple/index.php
-```
-
-Purpose:
-
-- Known-good reference implementation
-- Zero includes
-- Zero path complexity
-- Useful for debugging and sanity checks
-
-If the main app breaks, load `/simple/`.  
-If it works, PHP and the server are functioning correctly and the issue is structural.
-
-The `simple` app is reference-only and should not be extended.
+This keeps content and layout logically separated while remaining in a single file.
 
 ---
 
-## Design Principles
+## Design Rules
 
-- Root-only files
-- One entry point
-- One configuration file
-- Explicit includes
-- No hidden behavior
-- No premature abstractions
+- Keep everything in `index.php`
+- Add new pages by extending the switch statement
+- Avoid introducing frameworks or loaders
+- Prefer clarity over abstraction
 
-Changes should be additive rather than refactors.
+If the file starts becoming hard to understand, it’s a signal to refactor intentionally — not incrementally.
 
 ---
 
-## Versioning
-
-This repository starts at:
+## Version
 
 ```
-v0.1-baseline
+v1.1-single-file-with-config
 ```
 
-This tag represents a frozen, known-good foundation. Future work should preserve this baseline and build on top of it.
+This version represents a stable baseline:
+- single file
+- local config include
+- debug-controlled error handling
 
 ---
 
