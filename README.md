@@ -1,147 +1,97 @@
-# Single-File PHP App (With Local Config)
+# PHP Web App Template
 
-This repository contains a **single-file PHP web application** designed to stay simple, explicit, and easy to understand.
+A minimal, framework-free PHP starter template for small web applications and internal tools.
 
-There are no frameworks, no autoloaders, no routing libraries, and no environment magic.
-Everything runs from one `index.php` file, with an optional local configuration include.
-
----
-
-## Goals
-
-- One folder
-- One executable PHP file
-- Explicit control over behavior
-- Easy to debug and reason about
-- Safe to copy, rename, or deploy anywhere
-
-This template is ideal for:
-- internal tools
-- admin utilities
-- prototypes
-- simple web apps
-- sanity-checking PHP environments
+Designed as a clean baseline that can be cloned and expanded per project.
 
 ---
 
-## Requirements
+## ✨ Features
 
-- PHP 8.1 or newer
-- Any PHP-capable web server  
-  (Apache, Nginx, IIS, or PHP’s built-in server)
-
-No Composer. No external dependencies.
+- Single entry point (`index.php`)
+- Local environment configuration
+- Debug toggle for development/production
+- Clean, minimal structure
+- No framework dependencies
 
 ---
 
-## Project Structure
+## 🚀 Getting Started
+
+After cloning this repository:
+
+### 1️⃣ Create Your Local Configuration File
+
+This project uses a local configuration file that is not included in the repository.
+
+Rename:
 
 ```
-/
-├─ index.php
-├─ config.local.php   (gitignored)
-├─ README.md
-└─ .gitignore
+config.example.local.php
 ```
 
----
+to:
 
-## How It Works
-
-### Entry Point
-
-`index.php` is the only executable file. It performs these steps in order:
-
-1. Loads local configuration
-2. Applies error handling based on configuration
-3. Selects a page using a query parameter
-4. Renders page content
-5. Wraps content in a simple HTML layout
-
-There are no hidden includes or side effects.
-
----
-
-## Configuration
-
-Local configuration lives in `config.local.php`.
-
-This file is required and intentionally **not committed** to version control.
+```
+config.local.php
+```
 
 Example:
 
-```php
-<?php
+```bash
+cp config.example.local.php config.local.php
+```
 
-return [
-    'app_name' => 'Single File PHP App',
+Then edit the file:
+
+```php
+$config = [
     'debug' => true,
 ];
 ```
 
-### `debug` setting
-
-- `true`  → PHP errors are displayed in the browser
-- `false` → PHP errors are hidden from the browser
-
-This allows the same codebase to be used for development and production.
+- `true` enables error display (development)
+- `false` hides errors (production)
 
 ---
 
-## Page Handling
+## 🔐 Why Use a Local Config File?
 
-Pages are handled explicitly inside `index.php` using a switch statement:
+`config.local.php` is excluded from version control to:
 
-```php
-$page = $_GET['page'] ?? 'home';
+- Prevent committing sensitive values
+- Allow environment-specific configuration
+- Keep production settings safe
 
-switch ($page) {
-    case 'page1':
-        // Page 1 output
-        break;
+If you modify the configuration structure, update `config.example.local.php` accordingly.
 
-    case 'page2':
-        // Page 2 output
-        break;
+---
 
-    default:
-        // Home page
-        break;
-}
-```
-
-Navigation uses simple query strings:
+## 📂 Project Structure
 
 ```
-?page=page1
-?page=page2
+.
+├── .gitignore
+├── config.example.local.php
+├── index.php
+└── README.md
 ```
 
-No routing layer is used.
-
 ---
 
-## Layout
+## 🧱 Philosophy
 
-Page content is captured using output buffering and injected into a simple layout at the bottom of the file.
+This template intentionally avoids:
 
-This keeps content and layout logically separated while remaining in a single file.
+- Frameworks
+- Routing layers
+- MVC structure
+- Authentication scaffolding
 
----
+It is meant to be:
 
-## Design Rules
+- Cloned
+- Renamed
+- Expanded intentionally
 
-- Keep everything in `index.php`
-- Add new pages by extending the switch statement
-- Avoid introducing frameworks or loaders
-- Prefer clarity over abstraction
-
-If the file starts becoming hard to understand, it’s a signal to refactor intentionally — not incrementally.
-
----
-
-## License
-
-Free to use for personal or internal projects.
-
-No warranty. No magic. No surprises.
+Start simple. Add only what your project needs.
